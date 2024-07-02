@@ -15,7 +15,7 @@ android {
 
     buildTypes {
         release {
-//            minifyEnabled true
+            minifyEnabled true
             proguardFiles 'proguard-rules.pro'
             proguardDictionaries {
                 dictionaryNames = ["build/class-dictionary", "build/package-dictionary", "build/obfuscation-dictionary"]
@@ -37,6 +37,14 @@ android {
             force 'com.squareup.okhttp3:okhttp:3.12.13'
         }
     }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+
+
 }
 
 dependencies {

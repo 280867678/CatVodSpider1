@@ -64,7 +64,7 @@ class OkRequest {
     public OkResult execute(OkHttpClient client) {
         try {
             Response response = client.newCall(request).execute();
-            return new OkResult(response.code(), response.body().string(), response.headers().toMultimap());
+            return new OkResult(response.code(), new String(response.body().bytes(), "GB2312"), response.headers().toMultimap());
         } catch (IOException e) {
             return new OkResult();
         }

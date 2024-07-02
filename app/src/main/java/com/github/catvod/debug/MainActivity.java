@@ -1,10 +1,13 @@
 package com.github.catvod.debug;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.catvod.R;
@@ -12,6 +15,7 @@ import com.github.catvod.crawler.Spider;
 import com.github.catvod.spider.CaoLiu;
 import com.github.catvod.spider.Cg51;
 import com.github.catvod.spider.Douban;
+import com.github.catvod.spider.Dygangs;
 import com.github.catvod.spider.IQIYI;
 import com.github.catvod.spider.Ikanbot;
 import com.github.catvod.spider.Init;
@@ -31,9 +35,11 @@ import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -41,6 +47,8 @@ public class MainActivity extends Activity {
 
     private ExecutorService executor;
     private Spider spider;
+    private TextView textView;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +68,78 @@ public class MainActivity extends Activity {
         Logger.addLogAdapter(new AndroidLogAdapter());
         executor = Executors.newCachedThreadPool();
         executor.execute(this::initSpider);
+        textView = findViewById(R.id.textView);
+
+
+        Dygangs spider1 = new Dygangs();
+//        try {
+//            String str = spider1.homeContent(true);
+//            textView.setText(str);
+//
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//        Logger.e("s","s");
+
+
+        List<String> ids = new ArrayList<>();
+        ids.add("/dsj/20240618/54844.htm");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+
+//                    String html = OkHttp.string("https://www.dygangs.net", spider1.getHeader());
+//                    Document doc = Jsoup.parse(html);
+//                    Elements elements = doc.getElementsByTag("table").get(2).select("tr").select("a");
+//                    LinkedHashMap<String, List<Filter>> filters = new LinkedHashMap<>();
+//                    for (int i = 0; i < elements.size() - 1; i++) {
+//                        if (i < 2 || i == elements.size() - 1) continue;
+//                        Element e = elements.get(i);
+//                        String typeId = e.attr("href");
+//                        Logger.e("AAAAAAAAAAAAtypeId ", typeId);
+//                        String typeName = e.text();
+//                        Logger.e("BBBBBBBBBBBBtypeName ", typeName);
+
+//                    String str = spider1.categoryContent("/bd/","1",true,new HashMap<>());
+//                    String home = spider1.homeContent(true);
+//                    https://www.dygangs.net/dsj/20240618/54844.htm
+//                    String detailContent = spider1.detailContent(ids);
+//                    String searchContent = spider1.searchContent("嫌疑人",true);
+
+
+//                    String en = new String("搜索".getBytes(StandardCharsets.UTF_8), "GBK");
+                    Log.e("URLEncoder搜索:", URLEncoder.encode("搜索","GBK"));
+                    Log.e("URLEncoderkeyboard:", URLEncoder.encode("嫌疑人","GBK"));
+                    String xb6vsearchContent = spider1.searchContent("嫌疑人", true);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                textView.append(xb6vsearchContent);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+//                                Logger.e("CCCCCCCCCC", typeId+"："+typeName+"\n");
+                        }
+                    });
+//                    }
+
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        }).start();
+        
+
+
+
+
+
+
     }
 
     private void initSpider() {
